@@ -11,3 +11,4 @@ Steps needed:
 
 ### Install Nugets:
 ```Install-Package Microsoft.Azure.Functions.Extensions -Version 1.1.0```
+```Install-Package Microsoft.Extensions.DependencyInjection -Version 3.1.11``` **As for January 2021, only .net 3.* is supported when deploying to Azure, therefore the package downgrade**
