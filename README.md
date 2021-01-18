@@ -14,4 +14,6 @@ Steps needed:
 
 ```Install-Package Microsoft.Extensions.DependencyInjection -Version 3.1.11``` 
 
+```Install-Package Microsoft.Extensions.Http -Version 3.1.11```
+
 **As for January 2021, only .net 3.* is supported when deploying to Azure, therefore the package downgrade to 3.1.11**
