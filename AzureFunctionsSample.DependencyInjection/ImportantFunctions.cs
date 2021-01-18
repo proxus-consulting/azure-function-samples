@@ -1,33 +1,36 @@
-using System;
-using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace AzureFunctionsSample.DependencyInjection
 {
-    public static class ImportantFunctions
+    public class ImportantFunctions
     {
-        [FunctionName("DoImportantWork")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        private readonly HttpClient http;
+
+        public ImportantFunctions(HttpClient http)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            this.http = http;
+        }
 
-            string name = req.Query["name"];
+        [FunctionName("DoImportantWork")]
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "website")] HttpRequest req, ILogger log)
+        {
+            log.LogInformation("Doing important work...");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var url = req.Query["url"];
+            log.LogDebug($"GET'ing {url}...");
+            var response = await http.GetAsync(url);
+            if(response.IsSuccessStatusCode)
+                log.LogInformation($"All good, got success status code when querying {url}.");
+            else
+                log.LogWarning($"Got HTTP response: {response.StatusCode} when querying url: {url}.");
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return new OkResult();
         }
     }
 }
