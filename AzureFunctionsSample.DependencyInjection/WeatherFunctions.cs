@@ -16,6 +16,7 @@ namespace AzureFunctionsSample.DependencyInjection
         [FunctionName("CheckWeather")]
         public async Task Run([TimerTrigger("0 */5 * * * *", RunOnStartup = true)]TimerInfo myTimer, ILogger log)
         {
+            log.LogInformation($"Checking weather for Copenhagen...");
             await weather.CheckWeather();
         }
     }

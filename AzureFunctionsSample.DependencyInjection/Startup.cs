@@ -13,13 +13,11 @@ namespace AzureFunctionsSample.DependencyInjection
             // This is needed for our services that requires a simple HttpClient
             builder.Services.AddHttpClient();
 
-            // This is registering a preconfigured HttpClient for our WeatherFunctions
-            builder.Services.AddHttpClient<WeatherService>(client =>
-            {
-                client.BaseAddress = new Uri("https://www.metaweather.com/api/");
-            });
+            //// This is registering a preconfigured HttpClient for our WeatherFunctions
+            //builder.Services.AddHttpClient<WeatherService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://www.metaweather.com/api/");
+            //});
         }
     }
-
-
 }

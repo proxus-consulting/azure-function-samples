@@ -23,9 +23,7 @@ namespace AzureFunctionsSample.DependencyInjection
 
         public async Task CheckWeather()
         {
-            log.LogInformation($"Checking weather for Copenhagen...");
             var weather = JsonConvert.DeserializeObject<WeatherResponse>(await http.GetStringAsync("location/554890/"));
-
             var todaysWeather =
                 weather.consolidated_weather.FirstOrDefault(x =>
                     x.applicable_date == $"{DateTime.UtcNow.ToShortDateString()}");
